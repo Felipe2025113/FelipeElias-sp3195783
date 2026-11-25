@@ -82,7 +82,7 @@ def create_app(overrides=None):
     @app.errorhandler(SQLAlchemyError)
     def database_error(error):
         if hasattr(g,'db'): g.db.rollback()
-        app.logger.error('Falha de banco: %s - %s', type(error).__name__, str(error)[:400])
+        app.logger.error('Falha de banco: %s - %s | host=%s db=%s', type(error).__name__, str(error)[:300], app.extensions['engine'].url.host, app.extensions['engine'].url.database)
         return render_template('error.html',title='Banco indisponível',message='Verifique a conexão e as migrações. Nenhuma operação parcial foi confirmada.'),503
     @app.errorhandler(CSRFError)
     def csrf_error(error):
